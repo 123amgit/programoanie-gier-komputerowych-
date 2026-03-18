@@ -14,7 +14,7 @@ Zaimplementowano:
 - sprite gracza o nazwie `player`.
 
 ## Link do projektu microStudio
-[TU_WKLEJ_BEZPOSREDNI_LINK_DO_PROJEKTU]
+[https://microstudio.dev/i/123jiangsu/lab1/]
 
 ## Uwagi
 Projekt został ustawiony jako publiczny, aby prowadzący mógł sprawdzić kod.
