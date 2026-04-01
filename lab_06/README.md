@@ -5,29 +5,35 @@ Projekt wykonany w Pythonie z użyciem biblioteki **pyray / raylib**.
 ## Opis
 Program rozszerza projekt z Lab 05 do klasycznej mechaniki gry typu **Asteroids**.
 
-Zaimplementowano świat toroidalny (bez ścian), w którym:
+Zaimplementowano świat toroidalny, w którym:
 - prawa krawędź łączy się z lewą,
 - górna krawędź łączy się z dolną.
 
-Obiekty nie znikają przy przejściu przez krawędź — są jednocześnie widoczne po obu stronach (ghost rendering).
+Obiekty nie znikają nagle po przejściu przez krawędź ekranu. Dzięki ghost rendering są widoczne jednocześnie po obu stronach, co daje płynne przejście.
 
 Na scenie znajdują się:
 - sterowany statek,
 - losowo generowane asteroidy o nieregularnych kształtach.
 
 ## Główne funkcjonalności
-- świat toroidalny (wrap przez modulo)
-- ghost rendering (wielokrotne rysowanie przy krawędziach)
-- statek z fizyką:
-  - rotacja
-  - thrust
-  - bezwładność
-  - tarcie
-  - limit prędkości
-- proceduralne asteroidy:
-  - losowy kształt wielokąta
-  - losowa prędkość i rotacja
-- wspólna logika w `utils.py`
-- konfiguracja w `config.py`
+- świat toroidalny z zawijaniem pozycji przez modulo,
+- ghost rendering przy krawędziach ekranu,
+- statek z fizyką ruchu:
+  - obrót,
+  - thrust,
+  - bezwładność,
+  - tarcie,
+  - ograniczenie maksymalnej prędkości,
+- proceduralnie generowane asteroidy,
+- losowy ruch i rotacja asteroid,
+- wspólna logika pomocnicza w `utils.py`,
+- konfiguracja parametrów w `config.py`.
 
 ## Struktura projektu
+```text
+lab06/
+├── main.py
+├── ship.py
+├── asteroid.py
+├── utils.py
+└── config.py
