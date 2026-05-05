@@ -1,6 +1,6 @@
 # Laboratorium 09 - Scena 3D i szyna
 
-Przedmiot: **Tworzenie Gier Komputerowych**  
+Przedmiot: **Programowanie Gier Komputerowych**  
 Technologia: **Godot Engine 4.x / GDScript**
 
 Projekt jest pierwszym laboratorium z bloku 3D. Celem jest przygotowanie prostej sceny typu **on-rails**, czyli takiej, w której kamera i statek automatycznie przesuwają się po trasie, a gracz steruje tylko odchyleniem statku w płaszczyźnie XY.
@@ -85,11 +85,3 @@ To ogranicza obszar manewrowania i spełnia wymaganie laboratorium.
 4. Otwórz projekt.
 5. Uruchom scenę klawiszem `F5`.
 
-## Co pokazać prowadzącemu
-
-- Scena uruchamia się bez błędów.
-- W drzewie sceny widać `Path3D` i `PathFollow3D`.
-- Kamera i statek poruszają się po trasie.
-- Strzałki przesuwają statek lokalnie w osi X/Y.
-- Statek nie wylatuje poza obszar dzięki `clamp()`.
-- `rail_speed` można zmieniać w inspektorze.
