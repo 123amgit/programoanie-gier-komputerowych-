@@ -1,6 +1,6 @@
 # Laboratorium 07 - Pociski, zasoby i kolizje
 
-Przedmiot: **Tworzenie Gier Komputerowych**  
+Przedmiot: **Programowanie Gier Komputerowych**  
 Technologia: **Raylib-Python / pyray**
 
 Projekt jest rozwinięciem poprzedniego laboratorium z asteroidami. Dodano strzelanie, dynamiczną listę pocisków, dźwięki, teksturę tła, kolizje kołowe oraz animację eksplozji.
