@@ -1,0 +1,11 @@
+# Godot - lokalne pliki edytora i cache
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+
+# System / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
