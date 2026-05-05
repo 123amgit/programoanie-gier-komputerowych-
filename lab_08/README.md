@@ -1,6 +1,6 @@
 # Laboratorium 08 - Architektura, FSM, podział asteroid i koniec gry
 
-Przedmiot: **Tworzenie Gier Komputerowych**  
+Przedmiot: **Programowanie Gier Komputerowych**  
 Technologia: **Python + Raylib/Pyray**
 
 Projekt jest kontynuacją `lab_07`. W poprzednim laboratorium dodano pociski, dźwięki, kolizje i eksplozje. W tym laboratorium gra dostała strukturę pełniejszej mini-gry: menu, rozgrywkę, ekran końcowy, punktację, najlepszy wynik oraz trzypoziomowy podział asteroid.
@@ -134,16 +134,3 @@ Dźwięki i tekstura są ładowane przed pętlą gry i zwalniane po jej zakończ
 ### Zapis najlepszego wyniku
 
 Najlepszy wynik jest zapisywany w pliku `scores.txt`. Plik nie musi istnieć przy pierwszym uruchomieniu. Program używa `try/except`, więc tworzy go dopiero przy zapisie.
-
-## Co wrzucić do GitHub
-
-W repozytorium powinien znaleźć się cały folder `lab_08`.
-
-Nie wrzucamy:
-
-- `.venv/`,
-- `__pycache__/`,
-- plików `.pyc`,
-- ustawień IDE typu `.idea/`.
-
-Te pliki są ignorowane przez `.gitignore`.
