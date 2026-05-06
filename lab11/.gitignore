@@ -1,0 +1,13 @@
+# Lokalne dane Godot. Nie wysyłamy ich do repozytorium.
+.godot/
+.import/
+*.import
+*.tmp
+*.uid
+export_presets.cfg
+
+# IDE / system.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
