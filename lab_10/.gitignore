@@ -1,0 +1,22 @@
+# Godot generuje ten folder lokalnie po otwarciu projektu.
+# Nie należy go wysyłać do repozytorium.
+.godot/
+
+# Pliki importu i tymczasowe.
+.import/
+*.import
+*.tmp
+
+# Pliki UID Godot 4 mogą zostać odtworzone lokalnie.
+# Jeśli już trafią do repozytorium, nie jest to tragedia,
+# ale w prostym laboratorium można je pominąć.
+*.uid
+
+# Ustawienia eksportu zwykle nie są potrzebne w laboratorium.
+export_presets.cfg
+
+# IDE / system.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
