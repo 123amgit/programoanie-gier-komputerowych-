@@ -1,6 +1,6 @@
 # Laboratorium 10 - Strzelanie i kolizje 3D
 
-Przedmiot: **Tworzenie Gier Komputerowych**  
+Przedmiot: **Programowanie Gier Komputerowych**  
 Technologia: **Godot Engine 4.x / GDScript**
 
 Projekt jest rozwinięciem `lab_09`. W poprzednim laboratorium powstała scena 3D z ruchem po szynie (`Path3D` + `PathFollow3D`) oraz sterowaniem statkiem w lokalnej płaszczyźnie XY. W tym laboratorium dodano strzelanie, pociski jako osobne sceny, cele, kolizje `Area3D`, warstwy kolizji, cooldown strzału i prosty wynik wypisywany w konsoli.
@@ -208,33 +208,6 @@ Projekt spełnia wymagania:
 - kilka celów znajduje się w scenie,
 - wynik jest wypisywany w konsoli,
 - projekt nie wymaga wysyłania folderu `.godot/`.
-
----
-
-## Co wysłać do GitHub?
-
-Wyślij cały folder:
-
-```text
-lab_10/
-```
-
-Nie wysyłaj:
-
-```text
-.godot/
-.import/
-*.uid
-*.tmp
-.idea/
-.vscode/
-```
-
----
-
-## Propozycja commita
-
-```bash
 git add lab_10
 git commit -m "Add lab 10 Godot shooting and 3D collisions"
 git push
