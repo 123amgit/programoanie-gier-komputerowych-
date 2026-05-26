@@ -67,4 +67,3 @@ Wersja początkowa zawiera:
 
 - Na tym etapie gra ma tylko ekran menu.
 - Mechanika gracza, kolizje, przeciwnicy i dźwięki zostaną dodane w kolejnych commitach.
-
