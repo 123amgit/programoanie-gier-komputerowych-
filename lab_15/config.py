@@ -7,5 +7,8 @@ FPS = 60
 
 WINDOW_TITLE = "Library Ghost"
 
-# Podstawowe kolory w formacie Raylib Color będą tworzone w main.py,
-# aby ten plik pozostał prosty i czytelny.
+PLAYER_START_X = SCREEN_WIDTH / 2
+PLAYER_START_Y = SCREEN_HEIGHT / 2
+PLAYER_RADIUS = 18
+PLAYER_SPEED = 230
+PLAYER_MAX_ENERGY = 100
