@@ -12,6 +12,10 @@ def distance(x1: float, y1: float, x2: float, y2: float) -> float:
     return math.hypot(x2 - x1, y2 - y1)
 
 
+def circle_collision(x1: float, y1: float, r1: float, x2: float, y2: float, r2: float) -> bool:
+    return distance(x1, y1, x2, y2) <= r1 + r2
+
+
 def circle_rect_collision(cx: float, cy: float, radius: float, rect) -> bool:
     """
     Sprawdza kolizję koła z prostokątem Raylib Rectangle.
