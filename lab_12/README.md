@@ -296,34 +296,3 @@ Po uruchomieniu przez **F5** sprawdź:
 7. Gdy wciśniesz `Q`, statek wykonuje barrel roll.
 8. Podczas barrel roll uderzenie nie zmniejsza HP.
 9. W konsoli nie ma czerwonych błędów.
-
----
-
-## Co wysłać na GitHub?
-
-Wyślij cały folder:
-
-```text
-lab_12/
-```
-
-Nie wysyłaj:
-
-```text
-.godot/
-.import/
-*.uid
-*.tmp
-.idea/
-.vscode/
-```
-
----
-
-## Propozycja commita
-
-```bash
-git add lab_12
-git commit -m "Add lab 12 environment camera lag and barrel roll"
-git push
-```
