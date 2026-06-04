@@ -206,18 +206,3 @@ level_complete
 | Strzałki | ruch statku w X/Y |
 | Spacja | strzał |
 | Q | barrel roll / chwilowa nieśmiertelność |
-
----
-
-## Co pokazać prowadzącemu
-
-1. Uruchom projekt, pojawia się menu.
-2. Kliknij `Graj`.
-3. W grze widać HUD: wynik, życia, HP.
-4. Strzel do wrogów, wynik rośnie.
-5. Przy trafieniu gracza HP maleje.
-6. Po utracie HP traci się życie.
-7. Po utracie wszystkich żyć pojawia się ekran `Koniec gry`.
-8. Po zniszczeniu wszystkich fal pojawia się ekran `Poziom ukończony`.
-9. Przycisk `Menu` wraca do menu.
-10. Nowa gra zaczyna się z czystym stanem dzięki `GameManager.reset()`.
