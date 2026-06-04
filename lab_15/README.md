@@ -188,20 +188,6 @@ Mechanika ta będzie pełnić funkcję dodatkowego elementu strategicznego.
 
 ---
 
-## Czy projekt jest klonem?
-
-Nie. Projekt nie jest klonem gry wykonywanej na zajęciach.
-
-Projekt nie jest:
-
-- Space Invaders
-- Asteroids
-- on-rails shooterem
-
-Jest to autorska gra 2D typu stealth/collection, w której głównym celem jest zbieranie stron, odnoszenie ich do półki i unikanie światła strażników.
-
----
-
 ## Znane ograniczenia
 
 - Światło strażnika jest uproszczone jako okrągły obszar wykrywania.
