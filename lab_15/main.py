@@ -1,10 +1,18 @@
 # main.py
-# Library Ghost - etap 4: ruch, kolizje, zbieranie stron i magiczna półka.
+# Library Ghost - etap 5: strony, półka, strażnicy, światło i przegrana.
 
 import pyray as pr
 
-from config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, WINDOW_TITLE, PAGES_TO_WIN
+from config import (
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    FPS,
+    WINDOW_TITLE,
+    PAGES_TO_WIN,
+    FLASHLIGHT_DAMAGE_PER_SECOND,
+)
 from game_state import GameState
+from guard import Guard
 from obstacle import Obstacle
 from page import Page
 from player import Player
@@ -51,12 +59,24 @@ def create_pages() -> list[Page]:
     ]
 
 
-def reset_game(player: Player, pages: list[Page]) -> tuple[int, bool]:
+def create_guards() -> list[Guard]:
+    return [
+        Guard(220, 315, "x", 160, 360),
+        Guard(650, 290, "y", 190, 430),
+    ]
+
+
+def reset_game(player: Player, pages: list[Page], guards: list[Guard]) -> tuple[int, bool]:
     player.reset()
 
     for page in pages:
         page.collected = False
         page.delivered = False
+
+    for guard in guards:
+        guard.x = guard.start_x
+        guard.y = guard.start_y
+        guard.direction = 1
 
     delivered_pages = 0
     carrying_page = False
@@ -64,9 +84,9 @@ def reset_game(player: Player, pages: list[Page]) -> tuple[int, bool]:
     return delivered_pages, carrying_page
 
 
-def update_menu(player: Player, pages: list[Page]) -> tuple[GameState, int, bool]:
+def update_menu(player: Player, pages: list[Page], guards: list[Guard]) -> tuple[GameState, int, bool]:
     if pr.is_key_pressed(pr.KEY_ENTER):
-        delivered_pages, carrying_page = reset_game(player, pages)
+        delivered_pages, carrying_page = reset_game(player, pages, guards)
         return GameState.PLAYING, delivered_pages, carrying_page
 
     return GameState.MENU, 0, False
@@ -88,6 +108,7 @@ def update_playing(
     obstacles: list[Obstacle],
     pages: list[Page],
     shelf: Shelf,
+    guards: list[Guard],
     delivered_pages: int,
     carrying_page: bool,
 ) -> tuple[GameState, int, bool]:
@@ -104,6 +125,22 @@ def update_playing(
             player.x = old_x
             player.y = old_y
             break
+
+    # Aktualizacja strażników i obrażenia od światła.
+    player_in_light = False
+
+    for guard in guards:
+        guard.update(dt)
+
+        if guard.sees_player(player):
+            player_in_light = True
+
+    if player_in_light:
+        player.energy -= FLASHLIGHT_DAMAGE_PER_SECOND * dt
+
+    if player.energy <= 0:
+        player.energy = 0
+        return GameState.GAME_OVER, delivered_pages, carrying_page
 
     # Zbieranie jednej strony naraz.
     if not carrying_page:
@@ -132,15 +169,26 @@ def update_playing(
     return GameState.PLAYING, delivered_pages, carrying_page
 
 
-def update_win(player: Player, pages: list[Page]) -> tuple[GameState, int, bool]:
+def update_win(player: Player, pages: list[Page], guards: list[Guard]) -> tuple[GameState, int, bool]:
     if pr.is_key_pressed(pr.KEY_ENTER):
-        delivered_pages, carrying_page = reset_game(player, pages)
+        delivered_pages, carrying_page = reset_game(player, pages, guards)
         return GameState.PLAYING, delivered_pages, carrying_page
 
     if pr.is_key_pressed(pr.KEY_BACKSPACE):
         return GameState.MENU, 0, False
 
     return GameState.WIN, PAGES_TO_WIN, False
+
+
+def update_game_over(player: Player, pages: list[Page], guards: list[Guard]) -> tuple[GameState, int, bool]:
+    if pr.is_key_pressed(pr.KEY_ENTER):
+        delivered_pages, carrying_page = reset_game(player, pages, guards)
+        return GameState.PLAYING, delivered_pages, carrying_page
+
+    if pr.is_key_pressed(pr.KEY_BACKSPACE):
+        return GameState.MENU, 0, False
+
+    return GameState.GAME_OVER, 0, False
 
 
 def draw_library_background() -> None:
@@ -169,17 +217,32 @@ def draw_carried_page_icon(player: Player, carrying_page: bool) -> None:
     pr.draw_rectangle_lines(x, y, 13, 17, pr.Color(130, 115, 80, 255))
 
 
-def draw_hud(player: Player, delivered_pages: int, carrying_page: bool) -> None:
+def draw_hud(player: Player, delivered_pages: int, carrying_page: bool, player_in_light: bool) -> None:
     pr.draw_rectangle(0, 0, SCREEN_WIDTH, 45, pr.Color(14, 12, 22, 240))
 
-    pr.draw_text("Library Ghost - strony i magiczna polka", 20, 13, 18, pr.RAYWHITE)
-    pr.draw_text(f"Strony: {delivered_pages}/{PAGES_TO_WIN}", 555, 13, 18, pr.Color(235, 226, 185, 255))
-    pr.draw_text(f"Energia: {int(player.energy)}", 720, 13, 18, pr.Color(210, 220, 255, 255))
+    pr.draw_text("Library Ghost - straznicy i latarki", 20, 13, 18, pr.RAYWHITE)
+    pr.draw_text(f"Strony: {delivered_pages}/{PAGES_TO_WIN}", 500, 13, 18, pr.Color(235, 226, 185, 255))
 
-    if carrying_page:
+    energy_color = pr.Color(210, 220, 255, 255)
+    if player.energy < 35:
+        energy_color = pr.Color(255, 120, 120, 255)
+
+    pr.draw_text(f"Energia: {int(player.energy)}", 665, 13, 18, energy_color)
+
+    if player_in_light:
+        pr.draw_text("UWAGA: duch jest w swietle latarki!", 20, SCREEN_HEIGHT - 28, 16, pr.Color(255, 210, 120, 255))
+    elif carrying_page:
         pr.draw_text("Niesiesz strone - wroc do magicznej polki", 20, SCREEN_HEIGHT - 28, 16, pr.Color(235, 226, 185, 255))
     else:
-        pr.draw_text("Zbierz strone i dostarcz ja do magicznej polki", 20, SCREEN_HEIGHT - 28, 16, pr.GRAY)
+        pr.draw_text("Zbierz strone i unikaj swiatla straznikow", 20, SCREEN_HEIGHT - 28, 16, pr.GRAY)
+
+
+def is_player_in_any_light(player: Player, guards: list[Guard]) -> bool:
+    for guard in guards:
+        if guard.sees_player(player):
+            return True
+
+    return False
 
 
 def draw_playing(
@@ -187,6 +250,7 @@ def draw_playing(
     obstacles: list[Obstacle],
     pages: list[Page],
     shelf: Shelf,
+    guards: list[Guard],
     delivered_pages: int,
     carrying_page: bool,
 ) -> None:
@@ -200,9 +264,14 @@ def draw_playing(
     for page in pages:
         page.draw()
 
+    for guard in guards:
+        guard.draw()
+
     player.draw()
     draw_carried_page_icon(player, carrying_page)
-    draw_hud(player, delivered_pages, carrying_page)
+
+    player_in_light = is_player_in_any_light(player, guards)
+    draw_hud(player, delivered_pages, carrying_page, player_in_light)
 
 
 def draw_win() -> None:
@@ -211,6 +280,15 @@ def draw_win() -> None:
     draw_centered_text("YOU WIN", 190, 46, pr.Color(180, 255, 180, 255))
     draw_centered_text("Duch odniosl zagubione strony do magicznej polki.", 260, 22, pr.RAYWHITE)
     draw_centered_text("ENTER - zagraj ponownie", 325, 22, pr.Color(220, 220, 180, 255))
+    draw_centered_text("BACKSPACE - menu", 360, 20, pr.GRAY)
+
+
+def draw_game_over() -> None:
+    pr.clear_background(pr.Color(18, 12, 22, 255))
+
+    draw_centered_text("GAME OVER", 190, 46, pr.Color(255, 120, 120, 255))
+    draw_centered_text("Duch zbyt dlugo przebywal w swietle latarki.", 260, 22, pr.RAYWHITE)
+    draw_centered_text("ENTER - sproboj ponownie", 325, 22, pr.Color(220, 220, 180, 255))
     draw_centered_text("BACKSPACE - menu", 360, 20, pr.GRAY)
 
 
@@ -223,34 +301,37 @@ def main() -> None:
     obstacles = create_obstacles()
     pages = create_pages()
     shelf = Shelf()
+    guards = create_guards()
 
     delivered_pages = 0
     carrying_page = False
 
     while not pr.window_should_close():
         if state == GameState.MENU:
-            state, delivered_pages, carrying_page = update_menu(player, pages)
+            state, delivered_pages, carrying_page = update_menu(player, pages, guards)
         elif state == GameState.PLAYING:
             state, delivered_pages, carrying_page = update_playing(
                 player,
                 obstacles,
                 pages,
                 shelf,
+                guards,
                 delivered_pages,
                 carrying_page,
             )
         elif state == GameState.WIN:
-            state, delivered_pages, carrying_page = update_win(player, pages)
+            state, delivered_pages, carrying_page = update_win(player, pages, guards)
+        elif state == GameState.GAME_OVER:
+            state, delivered_pages, carrying_page = update_game_over(player, pages, guards)
 
         pr.begin_drawing()
 
         if state == GameState.MENU:
             draw_menu()
         elif state == GameState.PLAYING:
-            draw_playing(player, obstacles, pages, shelf, delivered_pages, carrying_page)
+            draw_playing(player, obstacles, pages, shelf, guards, delivered_pages, carrying_page)
         elif state == GameState.GAME_OVER:
-            pr.clear_background(pr.BLACK)
-            draw_centered_text("GAME OVER", 260, 36, pr.RED)
+            draw_game_over()
         elif state == GameState.WIN:
             draw_win()
 
