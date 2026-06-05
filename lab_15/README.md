@@ -38,17 +38,12 @@ Projekt używa:
 
 ## Sterowanie
 
-### Aktualnie dostępne
-
 - `ENTER` - start gry z menu albo restart po wygranej/przegranej
 - `WASD` - ruch ducha
 - `strzałki` - alternatywny ruch ducha
+- `SPACE` - tryb przezroczystości ducha
 - `BACKSPACE` - powrót z gry, ekranu wygranej albo ekranu przegranej do menu
 - `ESC` - zamknięcie okna gry
-
-### Planowane w ostatnim etapie
-
-- `SPACE` - tryb przezroczystości ducha
 
 ---
 
@@ -63,7 +58,8 @@ Zasady:
 - po dostarczeniu wymaganej liczby stron gracz wygrywa,
 - należy unikać światła strażników,
 - gdy duch zbyt długo pozostaje w świetle latarki, jego energia spada,
-- gdy energia spadnie do zera, gra kończy się przegraną.
+- gdy energia spadnie do zera, gra kończy się przegraną,
+- tryb przezroczystości pozwala przechodzić przez półki, ale zużywa energię.
 
 ---
 
@@ -105,6 +101,13 @@ Aktualna wersja zawiera:
 - uproszczone światło latarki jako obszar wykrywania,
 - spadek energii ducha po wejściu w światło,
 - warunek przegranej po spadku energii do zera,
+- tryb przezroczystości ducha pod klawiszem `SPACE`,
+- możliwość przechodzenia przez półki podczas przezroczystości,
+- dodatkowe zużycie energii podczas przezroczystości,
+- klasę `Particle`,
+- proste efekty cząsteczkowe przy zbieraniu i oddawaniu stron,
+- klasę `AudioManager`,
+- obsługę opcjonalnych efektów dźwiękowych,
 - podstawowy HUD z informacją o energii, stronach i aktualnym celu.
 
 ---
@@ -141,11 +144,11 @@ Główny plik gry. Zawiera pętlę programu, przełączanie stanów gry, tworzen
 
 ### `config.py`
 
-Plik z ustawieniami projektu, takimi jak rozmiar okna, prędkość gracza, liczba stron potrzebnych do wygranej, parametry strażników i światła.
+Plik z ustawieniami projektu, takimi jak rozmiar okna, prędkość gracza, liczba stron potrzebnych do wygranej, parametry strażników, światła oraz trybu przezroczystości.
 
 ### `game_state.py`
 
-Plik z globalną maszyną stanów gry. Aktualnie używane stany to:
+Plik z globalną maszyną stanów gry. Używane stany to:
 
 - `MENU`
 - `PLAYING`
@@ -154,11 +157,11 @@ Plik z globalną maszyną stanów gry. Aktualnie używane stany to:
 
 ### `player.py`
 
-Zawiera klasę gracza, czyli ducha. Odpowiada za ruch, reset pozycji, energię oraz rysowanie postaci.
+Zawiera klasę gracza, czyli ducha. Odpowiada za ruch, reset pozycji, energię, tryb przezroczystości oraz rysowanie postaci.
 
 ### `obstacle.py`
 
-Zawiera klasę przeszkód bibliotecznych. Przeszkody są prostokątami, z którymi duch może kolidować.
+Zawiera klasę przeszkód bibliotecznych. Przeszkody są prostokątami, z którymi duch może kolidować. W trybie przezroczystości duch może przez nie przechodzić.
 
 ### `page.py`
 
@@ -172,19 +175,60 @@ Zawiera klasę magicznej półki, która służy jako miejsce oddawania zebranyc
 
 Zawiera klasę strażnika. Strażnicy poruszają się po prostych trasach patrolowych i mają obszar światła latarki, który wykrywa ducha.
 
+### `particle.py`
+
+Zawiera klasę prostych cząsteczek wizualnych. Cząsteczki pojawiają się przy zbieraniu i oddawaniu stron, dzięki czemu gracz otrzymuje czytelniejszą informację zwrotną.
+
+### `audio_manager.py`
+
+Zawiera prosty manager dźwięków. Klasa `AudioManager` próbuje załadować pliki `.wav` z katalogu `assets/sounds`, ale gra działa również wtedy, gdy pliki dźwiękowe nie zostały dodane.
+
 ### `utils.py`
 
-Zawiera funkcje pomocnicze, między innymi obliczanie odległości oraz kolizję koła z prostokątem.
+Zawiera funkcje pomocnicze, między innymi obliczanie odległości, ograniczanie wartości oraz kolizję koła z prostokątem.
 
 ---
 
 ## Własny mechanizm
 
-Planowanym własnym mechanizmem gry jest **tryb przezroczystości ducha**.
+Własnym mechanizmem gry jest **tryb przezroczystości ducha**.
 
-W ostatnim etapie projektu duch będzie mógł aktywować przezroczystość za pomocą klawisza `SPACE`. W tym trybie gracz będzie mógł przechodzić przez wybrane przeszkody, ale energia ducha będzie spadać szybciej. Dzięki temu gracz będzie musiał podejmować decyzję, czy lepiej ominąć półki normalnie, czy zużyć energię i skrócić drogę przez przeszkodę.
+Gracz może aktywować przezroczystość za pomocą klawisza `SPACE`. W tym trybie duch może przechodzić przez półki biblioteczne, co pozwala skrócić drogę do strony albo magicznej półki. Mechanika nie jest jednak darmowa, ponieważ podczas przezroczystości energia ducha spada.
 
-Mechanika ta będzie pełnić funkcję dodatkowego elementu strategicznego.
+Dodatkowo przezroczysty duch otrzymuje trochę mniejsze obrażenia od światła strażników, ale nadal traci energię. Gracz musi więc decydować, czy warto użyć przezroczystości, czy lepiej ominąć przeszkody normalną drogą.
+
+Mechanika ta dodaje element planowania trasy i zarządzania energią.
+
+---
+
+## Efekty wizualne i dźwiękowe
+
+Projekt zawiera proste efekty cząsteczkowe przy zbieraniu oraz oddawaniu stron. Dzięki temu akcje gracza są bardziej widoczne.
+
+Projekt posiada także klasę `AudioManager`, która obsługuje opcjonalne efekty dźwiękowe. Jeżeli w katalogu `assets/sounds` znajdują się pliki:
+
+```text
+pickup.wav
+deliver.wav
+hit.wav
+win.wav
+```
+
+to gra może je odtworzyć w odpowiednich momentach. Jeżeli plików nie ma, gra nadal uruchamia się normalnie i działa bez dźwięków.
+
+---
+
+## Czy projekt jest klonem?
+
+Nie. Projekt nie jest klonem gry wykonywanej na zajęciach.
+
+Projekt nie jest:
+
+- Space Invaders
+- Asteroids
+- on-rails shooterem
+
+Jest to autorska gra 2D typu stealth/collection, w której głównym celem jest zbieranie stron, odnoszenie ich do półki, unikanie światła strażników i używanie trybu przezroczystości.
 
 ---
 
@@ -192,23 +236,9 @@ Mechanika ta będzie pełnić funkcję dodatkowego elementu strategicznego.
 
 - Światło strażnika jest uproszczone jako okrągły obszar wykrywania.
 - Strażnicy mają prosty patrol zamiast zaawansowanej sztucznej inteligencji.
-- Tryb przezroczystości jest zaplanowany, ale nie został jeszcze zaimplementowany.
-- Dźwięki nie zostały jeszcze dodane.
+- Dźwięki są obsługiwane przez `AudioManager`, ale projekt działa również bez zewnętrznych plików `.wav`.
 - Grafika jest prosta i oparta głównie na figurach 2D.
 - Gra ma jeden poziom.
-
----
-
-## Plan na ostatni etap
-
-Przed końcowym oddaniem projektu planowane jest dodanie:
-
-- trybu przezroczystości ducha pod klawiszem `SPACE`,
-- szybszego zużycia energii podczas przezroczystości,
-- możliwości przechodzenia przez wybrane przeszkody w tym trybie,
-- końcowej aktualizacji README,
-- ewentualnych prostych efektów dźwiękowych,
-- zrzutów ekranu z gry.
 
 ---
 
